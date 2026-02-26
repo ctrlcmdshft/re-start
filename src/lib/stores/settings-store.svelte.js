@@ -1,5 +1,22 @@
 import { defaultCustomColors } from '../config/themes.js'
 
+function detectFormatPreferences() {
+    try {
+        const use24h = !new Intl.DateTimeFormat(undefined, { hour: 'numeric' }).resolvedOptions().hour12;
+        const dayBeforeMonth = new Intl.DateTimeFormat().formatToParts(new Date())[0].type === 'day';
+        const useFahrenheit = navigator.language === 'en-US';
+        const useImperial = useFahrenheit;
+        return {
+            timeFormat: use24h ? '24hr' : '12hr',
+            dateFormat: dayBeforeMonth ? 'dmy' : 'mdy',
+            tempUnit: useFahrenheit ? 'fahrenheit' : 'celsius',
+            speedUnit: useImperial ? 'mph' : 'kmh',
+        }
+    } catch {
+        return {}
+    }
+}
+
 let defaultSettings = {
     font: 'Geist Mono Variable',
     currentTheme: 'default',
@@ -59,7 +76,8 @@ function loadSettings() {
         console.error('failed to load settings from localStorage:', error)
     }
 
-    return defaultSettings
+    const detected = detectFormatPreferences()
+    return { ...defaultSettings, ...detected }
 }
 
 export function saveSettings(settings) {
