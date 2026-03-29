@@ -37,6 +37,14 @@ export function injectThemeScript() {
                         if (parsed.currentTheme) {
                             themeName = parsed.currentTheme;
                         }
+                        if (parsed.font) {
+                            document.documentElement.style.setProperty('--font-family', "'" + parsed.font.trim() + "', monospace");
+                        }
+                        if (parsed.fontWeight) {
+                            var w = Number(parsed.fontWeight) || 400;
+                            document.documentElement.style.setProperty('--font-weight', String(w));
+                            document.documentElement.style.setProperty('--font-weight-light', String(Math.max(100, w - 100)));
+                        }
                     }
                     if (themeName === 'custom' && parsed && parsed.customThemeColors) {
                         var c = parsed.customThemeColors;

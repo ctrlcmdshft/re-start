@@ -23,6 +23,7 @@ function detectFormatPreferences() {
 
 let defaultSettings = {
     font: 'Geist Mono Variable',
+    fontWeight: 400,
     currentTheme: 'default',
     tabTitle: '~',
     taskBackend: 'local',

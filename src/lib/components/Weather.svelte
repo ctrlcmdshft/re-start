@@ -231,7 +231,7 @@
     }
     .temp {
         font-size: 2rem;
-        font-weight: 300;
+        font-weight: var(--font-weight-light);
         color: var(--txt-1);
         line-height: 2.625rem;
     }

@@ -8,6 +8,8 @@
     --txt-1: oklch(90% 0 0);
     --txt-err: oklch(70% 0.11 0);
     --font-family: 'Geist Mono Variable', monospace;
+    --font-weight: 400;
+    --font-weight-light: 300;
 }
 
 * {
@@ -22,7 +24,7 @@ body {
 
     font-family: var(--font-family);
     font-variant-numeric: tabular-nums;
-    font-weight: 400;
+    font-weight: var(--font-weight);
     font-size: 100%;
     line-height: 1.5;
 }
@@ -31,7 +33,7 @@ h1,
 h2,
 h3,
 h4 {
-    font-weight: 300;
+    font-weight: var(--font-weight-light);
     color: var(--txt-1);
 }
 

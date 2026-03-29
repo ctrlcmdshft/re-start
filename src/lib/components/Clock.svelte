@@ -93,7 +93,7 @@
     }
     .clock {
         font-size: 3.125rem;
-        font-weight: 300;
+        font-weight: var(--font-weight-light);
         color: var(--txt-1);
         line-height: 3.5rem;
         margin: 0 0 0.5rem 0;

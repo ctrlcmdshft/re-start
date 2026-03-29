@@ -405,13 +405,28 @@
                 {/if}
             </div>
             <div class="group">
-                <label for="font">font</label>
-                <input
-                    id="font"
-                    type="text"
-                    bind:value={settings.font}
-                    placeholder="Geist Mono Variable"
-                />
+                <div class="split">
+                    <div class="col">
+                        <label for="font">font</label>
+                        <input
+                            id="font"
+                            type="text"
+                            bind:value={settings.font}
+                            placeholder="Geist Mono Variable"
+                        />
+                    </div>
+                    <div class="col font-weight-col">
+                        <label for="font-weight">weight</label>
+                        <input
+                            id="font-weight"
+                            type="number"
+                            bind:value={settings.fontWeight}
+                            min="1"
+                            max="1000"
+                            placeholder="400"
+                        />
+                    </div>
+                </div>
             </div>
 
             <div class="group">
@@ -819,7 +834,7 @@
         padding: 0 0.5rem;
         font-size: 1.5rem;
         line-height: 2.25rem;
-        font-weight: 300;
+        font-weight: var(--font-weight-light);
     }
     .content {
         flex: 1;
@@ -834,6 +849,9 @@
     }
     .col {
         flex: 1;
+    }
+    .font-weight-col {
+        flex: 0 0 5rem;
     }
     .group {
         flex: 1;
@@ -946,7 +964,7 @@
     .remove-btn {
         padding: 0 0.25rem 0 0.5rem;
         font-size: 1.125rem;
-        font-weight: 300;
+        font-weight: var(--font-weight-light);
     }
     .settings-actions {
         display: flex;

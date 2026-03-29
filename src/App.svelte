@@ -59,6 +59,15 @@
     })
 
     $effect(() => {
+        const w = Number(settings.fontWeight) || 400
+        document.documentElement.style.setProperty('--font-weight', String(w))
+        document.documentElement.style.setProperty(
+            '--font-weight-light',
+            String(Math.max(100, w - 100))
+        )
+    })
+
+    $effect(() => {
         applyTheme(settings.currentTheme)
     })
 
