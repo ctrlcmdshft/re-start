@@ -76,9 +76,9 @@
     <div class="panel-label">datetime</div>
     <div class="panel">
         <div class="clock">
-            {currentHrs}<span class="colon">:</span>{currentMin}<span
+            {currentHrs}<span class="colon">:</span>{currentMin}{#if settings.showSeconds}<span
                 class="colon">:</span
-            >{currentSec}
+            >{currentSec}{/if}
             {#if settings.timeFormat === '12hr'}
                 <span class="ampm">{currentAmPm}</span>
             {/if}

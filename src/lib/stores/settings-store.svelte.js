@@ -32,6 +32,7 @@ let defaultSettings = {
     locationMode: 'manual',
     latitude: null,
     longitude: null,
+    showSeconds: true,
     timeFormat: '12hr',
     dateFormat: 'mdy',
     tempUnit: 'fahrenheit',

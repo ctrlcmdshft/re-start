@@ -15,7 +15,11 @@
     import Checkbox from './ui/Checkbox.svelte'
     import { createTaskBackend } from '../backends/index.js'
     import { isChrome } from '../utils/browser-detect.js'
-    import { guessIconSlug, isValidSlug, extractDomain } from '../utils/link-icons.js'
+    import {
+        guessIconSlug,
+        isValidSlug,
+        extractDomain,
+    } from '../utils/link-icons.js'
     import IconPicker from './IconPicker.svelte'
 
     let { showSettings = false, closeSettings } = $props()
@@ -324,7 +328,7 @@
             <div class="group">
                 <div class="setting-label">widgets</div>
                 <div class="checkbox-group">
-                    <Checkbox bind:checked={settings.showClock}>clock</Checkbox>
+                    <Checkbox bind:checked={settings.showClock}>datetime</Checkbox>
                     <Checkbox bind:checked={settings.showStats}>stats</Checkbox>
                     <Checkbox bind:checked={settings.showWeather}
                         >weather</Checkbox
@@ -566,6 +570,13 @@
                     <RadioButton bind:group={settings.timeFormat} value="24hr"
                         >24 hour</RadioButton
                     >
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">seconds</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.showSeconds} value={true}>show</RadioButton>
+                    <RadioButton bind:group={settings.showSeconds} value={false}>hide</RadioButton>
                 </div>
             </div>
             <div class="group">
@@ -1016,6 +1027,10 @@
     .checkbox-group {
         display: flex;
         gap: 3ch;
+    }
+    .checkbox-group {
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
     }
     .custom-colors-grid {
         margin-top: 1rem;
