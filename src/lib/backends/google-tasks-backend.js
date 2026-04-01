@@ -361,8 +361,8 @@ class GoogleTasksBackendExtension extends TaskBackend {
             }
             if (a.due_date !== b.due_date) return a.due_date ? -1 : 1
 
-            // Finally sort by position
-            return a.child_order - b.child_order
+            // Sort by position descending (most recent first) for no-due-date tasks
+            return b.child_order - a.child_order
         })
     }
 

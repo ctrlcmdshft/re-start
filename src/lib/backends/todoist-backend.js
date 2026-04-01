@@ -209,10 +209,10 @@ class TodoistBackend extends TaskBackend {
                 }
             }
 
-            // Sort by child_order, defaulting to 0 if undefined
+            // Sort by child_order descending (most recent first) for no-due-date tasks
             const aOrder = a.child_order ?? 0
             const bOrder = b.child_order ?? 0
-            return aOrder - bOrder
+            return bOrder - aOrder
         })
     }
 
