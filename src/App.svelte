@@ -34,6 +34,7 @@
     function handleGlobalKeydown(event) {
         if (showSettings) return
         if (event.defaultPrevented) return
+        if (event.ctrlKey || event.altKey || event.metaKey) return
 
         const target = event.target
         const isTypingField = target.tagName === 'INPUT' || 
