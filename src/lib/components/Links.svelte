@@ -30,14 +30,21 @@
                         rel="noopener noreferrer"
                         class="link"
                     >
-                        {#if settings.linkIconMode === 'icons' && isValidSlug(link.icon)}
-                            <span class="icon si si-{link.icon}"></span>
-                        {:else}
-                            <span class="prefix">></span>
+                        {#if settings.linkIconMode !== 'none'}
+                            {#if settings.linkIconMode === 'icons' && isValidSlug(link.icon)}
+                                <span class="icon si si-{link.icon}"></span>
+                            {:else}
+                                <span class="prefix">></span>
+                            {/if}
                         {/if}
-                        {link.title}
-                        {#if link.hotkey}
-                            <span class="hotkey">[{link.hotkey}]</span>
+                        {#if settings.linkHotkeys && settings.linkHotkeyPosition === 'left'}
+                            <span class="hotkey" class:empty={!link.hotkey}
+                                >{link.hotkey ? `[${link.hotkey}]` : ''}</span
+                            >
+                        {/if}
+                        <span class="title">{link.title}</span>
+                        {#if settings.linkHotkeys && link.hotkey && settings.linkHotkeyPosition === 'right'}
+                            <span class="hotkey right">[{link.hotkey}]</span>
                         {/if}
                     </a>
                     <br />
@@ -52,19 +59,31 @@
         display: flex;
         gap: 1.5rem;
     }
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
+    .link {
+        display: inline-flex;
+        width: 100%;
+        gap: 1ch;
+        align-items: center;
+    }
     .link:hover .prefix,
-    .link:hover .icon {
+    .link:hover .icon,
+    .link:hover .hotkey {
         color: var(--txt-2);
     }
     .prefix,
     .icon {
-        display: inline-block;
+        display: inline-flex;
         color: var(--txt-3);
-        text-align: center;
+        align-items: center;
+        justify-content: center;
     }
     .icon-mode .prefix,
     .icon {
-        width: 1.25rem;
+        width: 1rem;
     }
     .icon {
         font-size: 0.875rem;
@@ -75,7 +94,10 @@
     }
     .hotkey {
         color: var(--txt-3);
-        font-size: 0.75rem;
-        margin-left: 0.25rem;
+        width: 3ch;
+    }
+    .hotkey.right {
+        margin-left: auto;
+        width: auto;
     }
 </style>

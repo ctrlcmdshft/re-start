@@ -15,7 +15,11 @@
     import Checkbox from './ui/Checkbox.svelte'
     import { createTaskBackend } from '../backends/index.js'
     import { isChrome } from '../utils/browser-detect.js'
-    import { guessIconSlug, isValidSlug, extractDomain } from '../utils/link-icons.js'
+    import {
+        guessIconSlug,
+        isValidSlug,
+        extractDomain,
+    } from '../utils/link-icons.js'
     import IconPicker from './IconPicker.svelte'
 
     let { showSettings = false, closeSettings } = $props()
@@ -102,7 +106,10 @@
     }
 
     function addLink() {
-        settings.links = [...settings.links, { title: '', url: '', icon: '', hotkey: '' }]
+        settings.links = [
+            ...settings.links,
+            { title: '', url: '', icon: '', hotkey: '' },
+        ]
     }
 
     function removeLink(index) {
@@ -116,32 +123,8 @@
 
     function handleKeydown(event) {
         if (!showSettings) return
-
-        if (event.defaultPrevented) return
-
-        const target = event.target
-        const isTypingField =
-            target.tagName === 'INPUT' ||
-            target.tagName === 'TEXTAREA' ||
-            target.isContentEditable
-
-        if (isTypingField) return
-
         if (event.key === 'Escape') {
             handleClose()
-            return
-        }
-        const key = event.key
-        const link = settings.links.find((l) => l.hotkey === key)
-        if (link && link.url) {
-            event.preventDefault()
-            event.stopPropagation()
-            const target = settings.linkTarget || '_self'
-            if (target === '_blank') {
-                window.open(link.url, target, 'noopener,noreferrer')
-            } else {
-                window.open(link.url, target)
-            }
         }
     }
 
@@ -327,7 +310,7 @@
     })
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
 {#if showSettings}
     <div
@@ -644,6 +627,39 @@
                 </div>
             </div>
             <div class="group">
+                <div class="setting-label">link hotkeys</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.linkHotkeys} value={true}>
+                        on
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.linkHotkeys}
+                        value={false}
+                    >
+                        off
+                    </RadioButton>
+                </div>
+            </div>
+            {#if settings.linkHotkeys}
+                <div class="group">
+                    <div class="setting-label">hotkey hint position</div>
+                    <div class="radio-group">
+                        <RadioButton
+                            bind:group={settings.linkHotkeyPosition}
+                            value="left"
+                        >
+                            left
+                        </RadioButton>
+                        <RadioButton
+                            bind:group={settings.linkHotkeyPosition}
+                            value="right"
+                        >
+                            right
+                        </RadioButton>
+                    </div>
+                </div>
+            {/if}
+            <div class="group">
                 <div class="setting-label">link icons</div>
                 <div class="radio-group">
                     <RadioButton
@@ -657,6 +673,12 @@
                         value="arrow"
                     >
                         show &gt;
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.linkIconMode}
+                        value="none"
+                    >
+                        hide
                     </RadioButton>
                 </div>
             </div>
@@ -725,20 +747,33 @@
                                 bind:value={link.url}
                                 onchange={() => handleUrlChange(link)}
                                 placeholder="https://example.com"
-                                class="link-input"
+                                class="link-input url"
                                 draggable="false"
                             />
-                            <input
-                                type="text"
-                                bind:value={link.hotkey}
-                                placeholder="⌘"
-                                class="link-input hotkey"
-                                maxlength="1"
-                                draggable="false"
-                                oninput={(e) => {
-                                    link.hotkey = e.target.value.slice(-1)
-                                }}
-                            />
+                            {#if settings.linkHotkeys}
+                                <input
+                                    type="text"
+                                    bind:value={link.hotkey}
+                                    placeholder="⌘"
+                                    class="link-input hotkey"
+                                    maxlength="1"
+                                    draggable="false"
+                                    oninput={(e) => {
+                                        const key = e.target.value.slice(-1)
+                                        if (key) {
+                                            for (const other of settings.links) {
+                                                if (
+                                                    other !== link &&
+                                                    other.hotkey === key
+                                                ) {
+                                                    other.hotkey = ''
+                                                }
+                                            }
+                                        }
+                                        link.hotkey = key
+                                    }}
+                                />
+                            {/if}
                             <button
                                 class="remove-btn"
                                 onclick={() => removeLink(index)}
@@ -998,14 +1033,13 @@
         margin-right: 0.5rem;
         flex-shrink: 0;
     }
-    .link .link-input:not(.name):not(.hotkey) {
+    .link .link-input.url {
         flex: 1;
         min-width: 0;
         margin-right: 0.5rem;
     }
     .link .link-input.hotkey {
         width: 2rem;
-        margin-right: 0.5rem;
         text-align: center;
         flex-shrink: 0;
     }

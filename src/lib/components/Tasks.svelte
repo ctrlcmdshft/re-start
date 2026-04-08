@@ -97,6 +97,28 @@
         }
     }
 
+    function handleGlobalKeydown(event) {
+        if (settings.linkHotkeys) return
+
+        const activeElement = document.activeElement
+        const isInputFocused =
+            activeElement?.tagName === 'INPUT' ||
+            activeElement?.tagName === 'TEXTAREA' ||
+            (activeElement instanceof HTMLElement &&
+                activeElement.isContentEditable)
+
+        if (
+            addTaskComponent &&
+            !isInputFocused &&
+            event.key.length === 1 &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey
+        ) {
+            addTaskComponent.focus()
+        }
+    }
+
     $effect(() => {
         const backend = settings.taskBackend
         const token = settings.todoistApiToken
@@ -371,6 +393,8 @@
         document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>
+
+<svelte:window onkeydown={handleGlobalKeydown} />
 
 <div class="panel-wrapper">
     <button

@@ -33,36 +33,25 @@
 
     function handleGlobalKeydown(event) {
         if (showSettings) return
-        if (event.defaultPrevented) return
+        if (!settings.linkHotkeys) return
         if (event.ctrlKey || event.altKey || event.metaKey) return
 
         const target = event.target
-        const isTypingField = target.tagName === 'INPUT' || 
-                              target.tagName === 'TEXTAREA' || 
+        const isTypingField = target.tagName === 'INPUT' ||
+                              target.tagName === 'TEXTAREA' ||
                               target.isContentEditable
 
         if (isTypingField) return
 
-        const key = event.key
-        const link = settings.links.find((l) => l.hotkey === key)
+        const link = settings.links.find((l) => l.hotkey === event.key)
         if (link && link.url) {
             event.preventDefault()
             event.stopPropagation()
 
-            const effectiveTarget =
-                settings.linkTarget === '_blank' ? '_blank' : '_self'
-
-            if (effectiveTarget === '_self') {
-                window.location.assign(link.url)
+            if (settings.linkTarget === '_blank') {
+                window.open(link.url, '_blank', 'noopener,noreferrer')
             } else {
-                const newWindow = window.open(
-                    link.url,
-                    '_blank',
-                    'noopener,noreferrer'
-                )
-                if (newWindow) {
-                    newWindow.opener = null
-                }
+                window.location.assign(link.url)
             }
         }
     }
@@ -142,7 +131,7 @@
     })
 </script>
 
-<svelte:window on:keydown={handleGlobalKeydown} />
+<svelte:window onkeydown={handleGlobalKeydown} />
 
 <main>
     <div class="container">
